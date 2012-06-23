@@ -1,0 +1,8 @@
+1. Rozpakuj archiwum do folderu serwera WWW (najlepiej dostępnego tylko z sieci lokalnej)
+2. Utwórz bazę danych biblioteka i odpowiedniego użytkownika
+3. Wykonaj plik biblioteka.sql w bazie danych
+4. Ustaw dane logowania w pliku /includes/db2.php
+5. Folderom /covers i /covers_big nadaj uprawnienia do odczytu i zapisu
+6. W przypadku instalacji modułu OPAC foldery /covers i /covers_big powinny linkować do odpowiedników w katalogu głównego modułu
+7. Ustaw klucz API do Library Thing w pliku /includes/ksiazki.php
+8. Sprawdź wymagania systemu (otwórz poprzez serwer WWW plik test.php)

@@ -1,0 +1,65 @@
+body {	font: 12px Verdana;}
+.error {color: red; font-weight: bold;}
+
+table, table caption {
+	border: 1px solid black;
+	border-radius: 12px;
+	padding: 8px 10px;}
+table caption {
+	margin: 0 15px;
+	font-size: 250%;
+	font-weight: bold;}
+table.current, table.current caption {
+	border: 10px solid orange;
+	border-radius: 12px;}
+table.current caption {
+	margin-left: 30px;}
+
+table caption, table.current caption {
+	border-bottom: none;
+	-webkit-border-bottom-left-radius: 0;
+	-moz-border-radius-bottomleft: 0;
+	border-bottom-left-radius: 0;
+	-webkit-border-bottom-right-radius: 0;
+	-moz-border-radius-bottomright: 0;
+	border-bottom-right-radius: 0;}
+
+table {		margin: 15px 10px; border-spacing: 0 3px;}
+tr td {		border-width: 7px; border-style: solid;}
+tr td:first-child {
+	-webkit-border-top-left-radius: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+tr td:last-child {
+	-webkit-border-top-right-radius: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-bottomright: 8px;
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+tr.ok td {	background: #afa; border-color: #afa;}
+tr.err td {	background: #faa; border-color: #faa;}
+tr td {		background: #ffa; border-color: #ffa;}
+
+#data {		margin-bottom: 120px;}
+#status {
+	background: #ddd;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 100px;
+	padding: 5px 10px;
+}
+#status p {
+	margin: 5px;
+	padding: 0;
+}
+#result1 {	opacity: .4;}
+#result2 {	opacity: .6;}
+#input {	display: none;} 
