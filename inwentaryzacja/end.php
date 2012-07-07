@@ -14,11 +14,11 @@ if(!is_file('list.xml')) {
 }
 ?>
 
-<p>Poniżej znajduje się lista zmian do wykonania. Aby zatrzymać dane zmiany należy odznaczyć odpowiednie pole wyboru.</p>
+<p>Poniżej znajduje się lista zmian do wykonania. Aby nie dokonywać danej zmiany należy odznaczyć odpowiednie pole wyboru.</p>
 
 <form action="finish.php">
 <table class="width">
-<tr> <th>Okł.</th> <th> <b>Kod</b> <br /> Wyd. </th> <th> Autor <br /> <b>Tytuł</b> </th> <th> Miejsce, rok <br /> Wydawnictwo </th> <th> Akcje </th> </tr>
+<tr> <th> <b>Kod</b> <br /> Wyd. </th> <th> Autor <br /> <b>Tytuł</b> </th> <th> Miejsce, rok <br /> Wydawnictwo </th> <th> Akcje </th> </tr>
 <?php
 $doc = new DOMDocument;
 if(!$doc->load('list.xml')) {
@@ -32,6 +32,8 @@ foreach($doc->documentElement->childNodes as $loc) {
 	if(!($loc instanceof DOMElement) || $loc->tagName != 'lokalizacja') {
 		continue;
 	}
+	
+	$location = $loc->getAttribute('regal').'/'.$loc->getAttribute('polka').'/'.$loc->getAttribute('rzad');
 	
 	foreach($loc->childNodes as $node) {
 		if(!($node instanceof DOMElement) || $node->tagName != 'ksiazka') {
@@ -52,13 +54,21 @@ foreach($doc->documentElement->childNodes as $loc) {
 			}
 		}
 		
-		echo '<tr> <td></td> <td> <b>'.$dane['id'].'</b> <br /> </td> <td>'.$dane['autor'].' <br /> <b>'.$dane['tytul'].'</b></td> <td>'.$dane['miejsce'].' '.$dane['rok'].' <br /> '.$dane['wydawnictwo'].'</td> <td></td> </tr>'."\n";
+		echo '<tr class="'.($dane['status'] == 'moved' ? 'poz' : 'wyc').'"> <td> <b>'.$dane['id'].'</b> <br /> </td> <td>'.$dane['autor'].' <br /> <b>'.$dane['tytul'].'</b></td> <td>'.$dane['miejsce'].' '.$dane['rok'].' <br /> '.$dane['wydawnictwo'].'</td> <td>';
+		if($dane['status'] == 'moved') {
+			echo '<label><input type="checkbox" name="move['.$dane['id'].']" value="'.htmlspecialchars($location).'" checked="checked" />Przenieś do '.htmlspecialchars($location).'</label>';
+		}
+		else
+		{
+			echo '<label><input type="checkbox" name="repulse['.$dane['id'].']" value="1" checked="checked" />Wycofaj</label>';
+		}
+		echo '</td> </tr>'."\n";
 	}
 }
 ?>
 </table>
 
-<p><input type="submit" value="Wykonaj wybrane operacje" /></p>
+<p><input type="submit" value="Wykonaj wybrane operacje" /> <a href="locate.htm">Kontynuuj inwentaryzację</a> <a href="begin.php">Zacznij inwentaryzację od nowa</a></p>
 </form>
 
 <?php

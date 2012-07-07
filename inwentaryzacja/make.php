@@ -1,6 +1,7 @@
 <?php
 $title = 'Inwentaryzacja - rozpoczęcie';
 include('design/top.php');
+include('../includes/config.php');
 include('../includes/db2.php');
 
 $fields = array('tytul', 'autor', 'miejsce', 'rok', 'wydawnictwo');
@@ -64,7 +65,7 @@ fwrite($fp, '</inwentaryzacja>'."\n");
 
 <p>Jeżeli nie widzisz błędów powyżej to krok pierwszy został pomyślnie zakończony.</p>
 
-<form action="locate.php">
+<form action="locate.htm">
 <p>Możesz: <input type="submit" value="Rozpocząć inwentaryzację" /></p>
 </form>
 

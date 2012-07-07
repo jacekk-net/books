@@ -7,12 +7,14 @@ include('design/top.php');
 
 <p>Ten krok służy do przygotowania listy książek, które zostaną objęte inwentaryzacją.</p>
 
-<p>W trakcie inwentaryzacji zaleca się nie zmieniać położenia książek za pomocą interfejsu, gdyż dane te zostaną po zakończeniu procesu (krok 3) nadpisane.</p>
+<p>W trakcie inwentaryzacji zaleca się nie zmieniać położenia książek za pomocą interfejsu, gdyż dane te mogą zostać nadpisane po zakończeniu procesu (krok 3).</p>
+
+<p>Z interfejsu inwentaryzacji w danej chwili powinna korzystać tylko jedna osoba, w przeciwnym wypadku osoby inwentaryzujące mogą wzajemnie nadpisywać dane.</p>
 
 <?php
-if(file_exists('list.txt')) {
+if(file_exists('list.xml')) {
 ?>
-<p><strong>Niezapisane dane z poprzedniej inwentaryzacji zostaną usunięte!</strong></p>
+<p><strong>Dane z poprzedniej (niedokończonej) inwentaryzacji zostaną usunięte!</strong></p>
 
 <?php
 }

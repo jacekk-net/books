@@ -140,6 +140,10 @@ function processBook(book) {
 }
 
 function changeBook(book) {
+	if(document.getElementById('input').style.display != 'block') {
+		return false;
+	}
+	
 	if(book.parentNode == loc) {
 		xml.getElementById(book.id).setAttribute('status', 'ok');
 		
@@ -175,6 +179,10 @@ function clearInput() {
 }
 
 function processInput() {
+	if(document.getElementById('input').style.display != 'block') {
+		return false;
+	}
+	
 	var reg = /^([0-9]{1,8})$/;
 	var i1 = document.getElementById('i1').value;
 	var i2 = document.getElementById('i2').value;
@@ -220,6 +228,57 @@ function keyEvent(e) {
 		clearInput();
 		return false;
 	}
+}
+
+function saveWithCallback(callback) {
+	ajax.open('POST', 'save.php', true);
+	ajax.onreadystatechange = callback;
+	ajax.send(xml);
+}
+
+function save() {
+	document.getElementById('input').style.display = 'none';
+	status('Zapisywanie. Proszę czekać...');
+	
+	saveWithCallback(function() {
+		if(ajax.readyState == 3) {
+			status('Wysyłanie danych...');
+		}
+		else if(ajax.readyState == 4) {
+			if(ajax.status == 200) {
+				status('Dane zostały zapisane. '+ajax.status);
+			}
+			else
+			{
+				error('Zapis nie powiódł się. Błąd HTTP '+ajax.status);
+			}
+			
+			document.getElementById('input').style.display = 'block';
+		}
+	});
+}
+
+function end() {
+	document.getElementById('input').style.display = 'none';
+	status('Zapisywanie. Proszę czekać...');
+	
+	saveWithCallback(function() {
+		if(ajax.readyState == 3) {
+			status('Wysyłanie danych...');
+		}
+		else if(ajax.readyState == 4) {
+			if(ajax.status == 200) {
+				status('Dane zostały zapisane. '+ajax.status);
+				status('Przekierowywanie... Proszę czekać...');
+				window.location.replace('end.php');
+			}
+			else
+			{
+				error('Zapis nie powiódł się. Błąd HTTP '+ajax.status);
+				document.getElementById('input').style.display = 'block';
+			}
+		}
+	});
 }
 
 function process() {
@@ -269,33 +328,10 @@ function process() {
 	document.getElementById('i1').onkeydown = document.getElementById('i2').onkeydown = document.getElementById('i3').onkeydown = keyEvent;
 	document.getElementById('i4').onclick = processInput;
 	document.getElementById('i5').onclick = save;
+	document.getElementById('i6').onclick = end;
 	document.getElementById('i1').focus();
 	
 	status('Gotowy do pracy.');
-}
-
-function save() {
-	document.getElementById('input').style.display = 'none';
-	status('Zapisywanie. Proszę czekać...');
-	
-	ajax.open('POST', 'save.php', true);
-	ajax.onreadystatechange = function() {
-		if(ajax.readyState == 3) {
-			status('Wysyłanie danych...');
-		}
-		else if(ajax.readyState == 4) {
-			if(ajax.status == 200) {
-				status('Dane zostały zapisane. '+ajax.status);
-			}
-			else
-			{
-				error('Zapis nie powiódł się. Błąd HTTP '+ajax.status);
-			}
-			
-			document.getElementById('input').style.display = 'block';
-		}
-	};
-	ajax.send(xml);
 }
 
 function getData() {
