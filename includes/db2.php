@@ -8,9 +8,7 @@ class sql {
 	static $queries = 0;
 	
 	static function connect() {
-		# !!!
-		# TUTAJ USTAW DANE LOGOWANIA DO BAZY:
-		self::$db = @mysql_connect('host', 'uzytkownik', 'haslo');
+		self::$db = @mysql_connect(config::$db_host, config::$db_user, config::$db_pass);
 		if(!self::$db) {
 			error::add(mysql_error());
 		}
@@ -20,9 +18,7 @@ class sql {
 		
 		self::$queries = 0;
 		
-		# !!!
-		# TUTAJ USTAW NAZWĘ BAZY
-		if(!@mysql_select_db('baza')) {
+		if(!@mysql_select_db(config::$db_base)) {
 			error::add(mysql_error());
 		}
 	}

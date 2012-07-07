@@ -43,8 +43,6 @@ class ksiazki_cache {
 }
 
 class ksiazki extends ksiazki_cache {
-	static $LT_API = '';
-	
 	static function okladka($KOD, $ISBN) {
 		return okladki::znajdz($KOD, $ISBN, 'covers');
 	}

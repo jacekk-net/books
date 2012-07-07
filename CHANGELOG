@@ -1,5 +1,8 @@
 System Biblioteczny - CHANGELOG
 
+1.4 Stable
+- Przeniesienie ustawień skryptu do osobnego pliku (includes/config.php)
+
 1.3 Stable
 - Poprawienie okładek - getimagesize() zwraca IMAGETYPE_XXX, a nie IMG_XXX
 - Zmiana add_search.php w związku z nowym sposobem wywoływania

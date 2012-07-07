@@ -33,7 +33,7 @@ class okladki {
 	}
 	
 	static function librarything($ISBN, $dir = 'covers') {
-		if(!function_exists('curl_init') || !ksiazki::$LT_API) {
+		if(!function_exists('curl_init') || !config::$lt_api) {
 			return FALSE;
 		}
 		
@@ -49,7 +49,7 @@ class okladki {
 			}
 		}
 		
-		$get = 'http://www.librarything.com/devkey/'.ksiazki::$LT_API.'/'.($dir=='covers_big' ? 'large' : 'small').'/isbn/'.$ISBN10;
+		$get = 'http://www.librarything.com/devkey/'.config::$lt_api.'/'.($dir=='covers_big' ? 'large' : 'small').'/isbn/'.$ISBN10;
 		$curl = curl_init($get);
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
