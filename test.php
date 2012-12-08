@@ -31,7 +31,7 @@ else echo OK;
 
 
 <tr> <th class="head" colspan="2">Baza danych</th> </tr>
-<tr> <th>Ustawienia bazy<br />(/includes/db2.php)</th> <td><?php echo NT; ?></td> </tr>
+<tr> <th>Ustawienia bazy<br />(/includes/config.php)</th> <td><?php echo NT; ?></td> </tr>
 <tr> <th>Rozszerzenie MySQL</th> <td><?php
 if(!extension_loaded('mysql')) {
 	echo FAIL;
@@ -79,13 +79,13 @@ if(!extension_loaded('curl')) {
 	echo SFAIL;
 	$curl = FALSE;
 } else echo OK; ?></td> </tr>
-<tr> <th>LibraryThing API key<br />(/includes/ksiazki.php)</th> <td><?php
+<tr> <th>LibraryThing API key<br />(/includes/config.php)</th> <td><?php
 if($curl === FALSE)
 	echo NT;
-elseif(!empty(ksiazki::$LT_API))
+elseif(!empty(config::$lt_api))
 	echo OK;
 else
-	echo FAIL;
+	echo SFAIL;
 ?></td> </tr>
 <tr> <th>Uprawnienia dla katalogu<br />
 /covers</th> <td><?php
