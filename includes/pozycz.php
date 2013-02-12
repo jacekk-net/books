@@ -14,19 +14,19 @@ class pozycz {
 			error::add('Książka nie jest wypożyczona!');
 		}
 		
-		db2::edit('pozycz', array('do' => time()), array('id' => $kod, 'do' => NULL));
-		ksiazki::cache_clear($kod);
+		$st = PDOO::Singleton()->prepare('INSERT INTO pozycz_historia (id, kto, od, do)
+			SELECT id, kto, od, ? FROM pozycz WHERE id=?');
+		$st->execute(array(time(), $kod));
+		
+		$st = PDOO::Singleton()->prepare('DELETE FROM pozycz WHERE id=?');
+		$st->execute(array($kod));
+		
+		ksiazki::cache_update($kod);
 	}
 	
 	static function pozyczona($kod) {
 		$ksiazka = ksiazki::szukaj_KOD($kod);
-		if($ksiazka['do']!==NULL OR $ksiazka['od']===NULL) {
-			return FALSE;
-		}
-		else
-		{
-			return $ksiazka['kto'];
-		}
+		return $ksiazka['od'] != NULL;
 	}
 }
 ?>

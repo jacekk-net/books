@@ -112,6 +112,26 @@ echo '<td> <input type="hidden" name="id" value="'.$kod.'" readonly="readonly" /
 		return $ord;
 	}
 	
+	static function historia($kod) {
+		$st = PDOO::Singleton()->prepare(
+			 'SELECT * FROM pozycz_historia WHERE id=?'."\n"
+			.'UNION'."\n"
+			.'SELECT *, \'\' AS do FROM pozycz WHERE id=? ORDER BY od ASC'
+		);
+		$st->execute(array($kod, $kod));
+		$dane = $st->fetchAll();
+		
+		$info = '<table id="bhist">
+<tr> <th>Pożyczający</th> <th>Od</th> <th>Do</th> </tr>
+';
+		
+		foreach($dane as $o) {
+			$info .= '<tr> <td>'.htmlspecialchars($o['kto']).'</td> <td>'.date('Y-m-d H:i:s', $o['od']).'</td> <td>'.($o['do'] ? date('Y-m-d H:i:s', $o['do']) : '').'</td> </tr>'."\n";
+		}
+		
+		echo $info.'</table>';
+	}
+	
 	static function informacje($kod, $dane=NULL) {
 		if(is_null($dane)) {
 			$dane = ksiazki::szukaj_KOD($kod);

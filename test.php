@@ -32,8 +32,15 @@ else echo OK;
 
 <tr> <th class="head" colspan="2">Baza danych</th> </tr>
 <tr> <th>Ustawienia bazy<br />(/includes/config.php)</th> <td><?php echo NT; ?></td> </tr>
-<tr> <th>Rozszerzenie MySQL</th> <td><?php
-if(!extension_loaded('mysql')) {
+<tr> <th>Rozszerzenie PDO</th> <td><?php
+if(!extension_loaded('pdo')) {
+	echo FAIL;
+	$mysql = FALSE;
+}
+else echo OK;
+?></td> </tr>
+<tr> <th>Rozszerzenie PDO MySQL</th> <td><?php
+if(!extension_loaded('pdo_mysql')) {
 	echo FAIL;
 	$mysql = FALSE;
 }

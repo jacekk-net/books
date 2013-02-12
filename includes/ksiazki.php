@@ -13,10 +13,6 @@ class ksiazki_cache {
 	}
 	
 	static function cache_add($kod, &$dane) {
-		if($dane['od2']) {
-			$dane['od'] = $dane['od2'];
-			unset($dane['od2']);
-		}
 		self::$cache[(int)$kod] = $dane;
 	}
 	
@@ -37,7 +33,7 @@ class ksiazki_cache {
 	}
 	
 	static function cache_update($kod) {
-		$dane = db2::escape_data(sql::fetchone(sql::query('SELECT *, (SELECT MAX(`od`) FROM `pozycz` WHERE `pozycz`.`id`=`ksiazki`.`id`) as `od2`, (SELECT `do` FROM `pozycz` WHERE `pozycz`.`id`=`ksiazki`.`id` AND `od`=`od2`) as `do`, (SELECT `kto` FROM `pozycz` WHERE `pozycz`.`id`=`ksiazki`.`id` AND `od`=`od2`) as `kto` FROM `ksiazki` WHERE `id`=\''.sql::escape($kod).'\'')));
+		$dane = db2::escape_data(sql::fetchone(sql::query('SELECT `ksiazki`.*, `pozycz`.`od`, `pozycz`.`kto` FROM `ksiazki` LEFT OUTER JOIN `pozycz` ON `pozycz`.`id`=`ksiazki`.`id` WHERE `ksiazki`.`id`='.sql::escape($kod))));
 		self::cache_add($kod, $dane);
 	}
 }
@@ -233,25 +229,25 @@ class ksiazki extends ksiazki_cache {
 		else
 		{
 			if($dane['do']) {
-				$num = db2::num('pozycz', 'id', array('do' => NULL));
-				if($num==0) {
+				$num = db2::num('pozycz', 'id');
+				if($num == 0) {
 					$ret = array();
 				}
 				else
 				{
-					$ret = db2::get(array('pozycz', array('J', 'ksiazki', 'USING', 'id')), '*', array('do' => NULL), $order, $start, $limit);
+					$ret = db2::get(array('pozycz', array('J', 'ksiazki', 'USING', 'id')), '*', NULL, $order, $start, $limit);
 				}
 			}
 			else
 			{
 				$num = db2::num('ksiazki', 'id', $where);
-				if($num==0) {
+				if($num == 0) {
 					$ret = array();
 				}
 				else
 				{
 					$where = db2::__combine_where($where, TRUE);
-					$ret = db2::escape_data(sql::fetch(sql::query('SELECT *, (SELECT MAX(`od`) FROM `pozycz` WHERE `pozycz`.`id`=`ksiazki`.`id`) as `od2`, (SELECT `do` FROM `pozycz` WHERE `pozycz`.`id`=`ksiazki`.`id` AND `od`=`od2`) as `do`, (SELECT `kto` FROM `pozycz` WHERE `pozycz`.`id`=`ksiazki`.`id` AND `od`=`od2`) as `kto`'.(db2::revelance() ? ', '.db2::$revelance : '').' FROM `ksiazki`'.$where.db2::__combine_order($order, TRUE).db2::__combine_limit($start, $limit))));
+					$ret = db2::escape_data(sql::fetch(sql::query('SELECT `ksiazki`.*, `pozycz`.`od`, `pozycz`.`kto` FROM `ksiazki` LEFT OUTER JOIN `pozycz` ON `pozycz`.`id`=`ksiazki`.`id`'.(db2::revelance() ? ', '.db2::$revelance : '').' '.$where.db2::__combine_order($order, TRUE).db2::__combine_limit($start, $limit))));
 				}
 			}
 			

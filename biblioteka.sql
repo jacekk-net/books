@@ -10,9 +10,9 @@ CREATE TABLE `ksiazki` (
   `ISBN` decimal(13,0) unsigned DEFAULT NULL,
   `ISSN` decimal(13,0) unsigned DEFAULT NULL,
   `regal` char(5) COLLATE utf8_polish_ci DEFAULT NULL,
-  `polka` tinyint(4) DEFAULT NULL,
-  `rzad` tinyint(4) DEFAULT NULL,
-  `wycofana` char(1) COLLATE utf8_polish_ci NOT NULL DEFAULT '0',
+  `polka` decimal(2,0) unsigned DEFAULT NULL,
+  `rzad` decimal(2,0) unsigned DEFAULT NULL,
+  `wycofana` enum('0','1') CHARACTER SET ascii NOT NULL DEFAULT '0',
   `powod` varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ISBN` (`ISBN`),
@@ -24,6 +24,13 @@ CREATE TABLE `ksiazki` (
 );
 
 CREATE TABLE `pozycz` (
+  `id` mediumint(8) unsigned NOT NULL,
+  `kto` varchar(255) COLLATE utf8_polish_ci NOT NULL,
+  `od` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`od`)
+);
+
+CREATE TABLE `pozycz_historia` (
   `id` mediumint(8) unsigned NOT NULL,
   `kto` varchar(255) COLLATE utf8_polish_ci NOT NULL,
   `od` int(11) NOT NULL,

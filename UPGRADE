@@ -1,0 +1,26 @@
+=================================================
+ Aktualizacja wersji 1.3 Stable i wcześniejszych
+=================================================
+
+- zapisz następujące informacje: dane połączenia z bazą danych,
+  klucz API LibraryThing
+- wgraj wszystkie zmienione pliki,
+- w pliku /includes/config.php podaj zapisane wcześniej dane,
+- wykonaj w bazie danych poniższe zapytania:
+
+CREATE TABLE `pozycz_historia` (
+  `id` mediumint(8) unsigned NOT NULL,
+  `kto` varchar(255) COLLATE utf8_polish_ci NOT NULL,
+  `od` int(11) NOT NULL,
+  `do` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`od`)
+);
+
+INSERT INTO `pozycz_historia` (`id`, `kto`, `od`, `do`)
+  SELECT `id`, `kto`, `od`, `do` FROM `pozycz` WHERE `do` IS NOT NULL;
+DELETE FROM `pozycz` WHERE `do` IS NOT NULL;
+
+ALTER TABLE `pozycz` DROP INDEX `do`;
+ALTER TABLE `pozycz` DROP COLUMN `do`;
+
+ALTER TABLE `pozycz` DROP PRIMARY KEY, ADD PRIMARY KEY (`id`);

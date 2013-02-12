@@ -2,6 +2,12 @@ System Biblioteczny - CHANGELOG
 
 1.4 Stable
 - Przeniesienie ustawień skryptu do osobnego pliku (includes/config.php)
+- Zmiana modułu do połączeń z MySQL z mysql na pdo_mysql
+- Rozdzielenie tabeli pozycz na dwie: pozycz i pozycz_historia
+- Wydzielenie pokazywania historii wypożyczeń do klasy gotowe
+- Zmiany w wielu miejscach w kodzie związane z tabelą pozycz
+- Poprawki w pliku test.php w związku z w/w zmianami
+- Dodanie pliku UPGRADE z instrukcją aktualizacji
 
 1.3 Stable
 - Poprawienie okładek - getimagesize() zwraca IMAGETYPE_XXX, a nie IMG_XXX

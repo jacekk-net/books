@@ -1,86 +1,57 @@
 <?php
-if(!extension_loaded('mysql')) {
-	error::add('Brak rozszerzenia MySQL. Skrypt nie będzie działał.');
-}
-
 class sql {
 	static $db;
 	static $queries = 0;
 	
+	static $PDO;
+	
 	static function connect() {
-		self::$db = @mysql_connect(config::$db_host, config::$db_user, config::$db_pass);
-		if(!self::$db) {
-			error::add(mysql_error());
-		}
-		
-		self::query('SET CHARACTER SET \'UTF8\'');
-		self::query('SET NAMES \'UTF8\'');
-		
-		self::$queries = 0;
-		
-		if(!@mysql_select_db(config::$db_base)) {
-			error::add(mysql_error());
-		}
 	}
 	
 	static function query($q) {
-		if(!self::$db) {
-			self::connect();
+		if(!self::$PDO) {
+			self::$PDO = PDOO::Singleton();
 		}
-		
-		if(!@mysql_ping(self::$db)) {
-			self::connect();
-		}
-		
-		$r = @mysql_query($q, self::$db);
 		
 		self::$queries++;
 		
-		if($r===FALSE) {
-			error::add(mysql_error().' '.$q);
-		}
-		
-		return $r;
+		return self::$PDO->query($q);
 	}
 	
 	static function fetchonea($q) {
-		return mysql_fetch_assoc($q);
+		return $q->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	static function fetchone($q) {
-		return mysql_fetch_array($q);
+		return $q->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	static function fetch($q) {
-		while ($entry = mysql_fetch_array($q)) {
-			$r[] = $entry;
-		}
-		
-		if(!$r) {
-			$r = array();
-		}
-		
-		return $r;
+		return $q->fetchAll();
 	}
 	
 	static function increment_id() {
-		return mysql_insert_id(self::$db);
+		if(!self::$PDO) {
+			self::$PDO = PDOO::Singleton();
+		}
+		
+		return self::$PDO->lastInsertId();
 	}
 	
-	static function affected() {
-		return mysql_affected_rows(self::$db);
+	static function affected($q = NULL) {
+		if($q === NULL) {
+			return 'nieznana';
+		}
+		
+		return $q->rowCount();
 	}
 	
 	static function escape($q) {
-		if(!self::$db) {
-			self::connect();
+		if(!self::$PDO) {
+			self::$PDO = PDOO::Singleton();
 		}
 		
-		if(!@mysql_ping(self::$db)) {
-			self::connect();
-		}
-		
-		return mysql_real_escape_string($q, self::$db);
+		return self::$PDO->quote($q);
 	}
 	
 	static function close() {
@@ -127,8 +98,8 @@ class db2 {
 				continue;
 			}
 			
-			$a[] = '`'.sql::escape($key).'`';
-			$b[] = '\''.sql::escape($value).'\'';
+			$a[] = '`'.$key.'`';
+			$b[] = sql::escape($value);
 		}
 		
 		return '('.implode(', ', $a).') VALUES ('.implode(', ', $b).')';
@@ -144,11 +115,11 @@ class db2 {
 				$value = NULL;
 			}
 			if(is_null($value)) {
-				$a[] = '`'.sql::escape($key).'`=NULL';
+				$a[] = '`'.$key.'` IS NULL';
 			}
 			else
 			{
-				$a[] = '`'.sql::escape($key).'`=\''.sql::escape($value).'\'';
+				$a[] = '`'.$key.'`='.sql::escape($value);
 			}
 		}
 		
@@ -195,7 +166,7 @@ class db2 {
 				}
 				else
 				{
-					$a[] = self::__combine_keyn($key).'=\''.sql::escape($value).'\'';
+					$a[] = self::__combine_keyn($key).'='.sql::escape($value);
 				}
 			}
 		}
@@ -218,13 +189,13 @@ class db2 {
 						$a[] = self::__combine_keyn($key).' IS NULL';
 					}
 					elseif(substr($key, -1)=='!') {
-						$a[] = self::__combine_keyn(substr($key, 0, -1)).'!=\''.sql::escape($value).'\'';
+						$a[] = self::__combine_keyn(substr($key, 0, -1)).'!='.sql::escape($value);
 					}
 					elseif($key=='^') {
 						$a[] = 'MAX('.self::__combine_keyn($value).')';
 					}
 					elseif(substr($key, -2)=='~~') {
-						$temp = 'MATCH ('.self::__combine_keyn(substr($key, 0, -2)).') AGAINST (\''.sql::escape($value).'\')';
+						$temp = 'MATCH ('.self::__combine_keyn(substr($key, 0, -2)).') AGAINST ('.sql::escape($value).')';
 						if($revelance) {
 							self::$revelance = $temp.' AS `revelance`';
 						}
@@ -232,23 +203,23 @@ class db2 {
 						$a[] = $temp;
 					}
 					elseif(substr($key, -1)=='~') {
-						$a[] = self::__combine_keyn(substr($key, 0, -1)).' LIKE \''.sql::escape($value).'\'';
+						$a[] = self::__combine_keyn(substr($key, 0, -1)).' LIKE '.sql::escape($value);
 					}
 					elseif(substr($key, -2)=='>=') {
-						$a[] = self::__combine_keyn(substr($key, 0, -2)).'>=\''.sql::escape($value).'\'';
+						$a[] = self::__combine_keyn(substr($key, 0, -2)).'>='.sql::escape($value);
 					}
 					elseif(substr($key, -2)=='<=') {
-						$a[] = self::__combine_keyn(substr($key, 0, -2)).'<=\''.sql::escape($value).'\'';
+						$a[] = self::__combine_keyn(substr($key, 0, -2)).'<='.sql::escape($value);
 					}
 					elseif(substr($key, -1)=='>') {
-						$a[] = self::__combine_keyn(substr($key, 0, -1)).'>\''.sql::escape($value).'\'';
+						$a[] = self::__combine_keyn(substr($key, 0, -1)).'>'.sql::escape($value);
 					}
 					elseif(substr($key, -1)=='<') {
-						$a[] = self::__combine_keyn(substr($key, 0, -1)).'<\''.sql::escape($value).'\'';
+						$a[] = self::__combine_keyn(substr($key, 0, -1)).'<'.sql::escape($value);
 					}
 					else
 					{
-						$a[] = self::__combine_keyn($key).'=\''.sql::escape($value).'\'';
+						$a[] = self::__combine_keyn($key).'='.sql::escape($value);
 					}
 				}
 			}
@@ -306,21 +277,21 @@ class db2 {
 			$as = $value;
 			$value = $key;
 		}
-		return '`'.sql::escape($value).'`'.($as ? ' AS `'.sql::escape($as).'`' : '');
+		return '`'.$value.'`'.($as ? ' AS `'.$as.'`' : '');
 	}
 	
 	static function __combine_keyn($key) {
 		if(!self::$SAFE_MODE_KEY AND strpos($key, '.')!==FALSE) {
 			$key = explode('.', $key, 2);
-			return '`'.sql::escape($key[0]).'`.`'.sql::escape($key[1]).'`';
+			return '`'.$key[0].'`.`'.$key[1].'`';
 		}
 		
-		return '`'.sql::escape($key).'`';
+		return '`'.$key.'`';
 	}
 	
 	static function __combine_table($table) {
 		if(!is_array($table) OR self::$SAFE_MODE_TABLE) {
-			return '`'.sql::escape($table).'` ';
+			return '`'.$table.'` ';
 		}
 		else
 		{
@@ -419,17 +390,17 @@ class db2 {
 	}
 	
 	static function add($table, $keys) {
-		sql::query('INSERT INTO `'.sql::escape($table).'` '.self::__combine_insert($keys));
+		sql::query('INSERT INTO `'.$table.'` '.self::__combine_insert($keys));
 		return sql::affected();
 	}
 	
 	static function edit($table, $keys, $where=NULL, $order=NULL, $limit=NULL, $stop=NULL) {
-		sql::query('UPDATE `'.sql::escape($table).'` SET '.self::__combine_update($keys).self::__combine_where($where).self::__combine_order($order).self::__combine_limit($limit, $stop));
+		sql::query('UPDATE `'.$table.'` SET '.self::__combine_update($keys).self::__combine_where($where).self::__combine_order($order).self::__combine_limit($limit, $stop));
 		return sql::affected();
 	}
 	
 	static function del($table, $where=NULL, $order=NULL, $limit=NULL, $stop=NULL) {
-		sql::query('DELETE FROM `'.sql::escape($table).'`'.self::__combine_where($where).self::__combine_order($order).self::__combine_limit($limit, $stop));
+		sql::query('DELETE FROM `'.$table.'`'.self::__combine_where($where).self::__combine_order($order).self::__combine_limit($limit, $stop));
 		return sql::affected();
 	}
 	
