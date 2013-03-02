@@ -115,7 +115,7 @@ class db2 {
 				$value = NULL;
 			}
 			if(is_null($value)) {
-				$a[] = '`'.$key.'` IS NULL';
+				$a[] = '`'.$key.'`=NULL';
 			}
 			else
 			{

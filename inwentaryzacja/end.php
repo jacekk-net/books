@@ -1,5 +1,5 @@
 <?php
-$title = 'Inwentaryzacja - rozpoczęcie';
+$title = 'Inwentaryzacja - zakończenie';
 include('design/top.php');
 ?>
 
@@ -16,7 +16,7 @@ if(!is_file('list.xml')) {
 
 <p>Poniżej znajduje się lista zmian do wykonania. Aby nie dokonywać danej zmiany należy odznaczyć odpowiednie pole wyboru.</p>
 
-<form action="finish.php">
+<form action="finish.php" method="post">
 <table class="width">
 <tr> <th> <b>Kod</b> <br /> Wyd. </th> <th> Autor <br /> <b>Tytuł</b> </th> <th> Miejsce, rok <br /> Wydawnictwo </th> <th> Akcje </th> </tr>
 <?php
