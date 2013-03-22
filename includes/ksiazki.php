@@ -247,7 +247,7 @@ class ksiazki extends ksiazki_cache {
 				else
 				{
 					$where = db2::__combine_where($where, TRUE);
-					$ret = db2::escape_data(sql::fetch(sql::query('SELECT `ksiazki`.*, `pozycz`.`od`, `pozycz`.`kto` FROM `ksiazki` LEFT OUTER JOIN `pozycz` ON `pozycz`.`id`=`ksiazki`.`id`'.(db2::revelance() ? ', '.db2::$revelance : '').' '.$where.db2::__combine_order($order, TRUE).db2::__combine_limit($start, $limit))));
+					$ret = db2::escape_data(sql::fetch(sql::query('SELECT `ksiazki`.*, `pozycz`.`od`, `pozycz`.`kto`'.(db2::revelance() ? ', '.db2::$revelance : '').' FROM `ksiazki` LEFT OUTER JOIN `pozycz` ON `pozycz`.`id`=`ksiazki`.`id` '.$where.db2::__combine_order($order, TRUE).db2::__combine_limit($start, $limit))));
 				}
 			}
 			
