@@ -47,34 +47,6 @@ class ksiazki extends ksiazki_cache {
 		return okladki::znajdz($KOD, $ISBN, 'covers_big');
 	}
 	
-	static function dodaj(&$dane) {
-		validate::KOD($dane['id'], FALSE);
-		
-		if($dane['ISBN']) {
-			$t = validate::type($dane['ISBN']);
-			if($t!='ISBN') {
-				error::add('W polu ISBN znajduje się '.$t);
-			}
-		}
-		if($dane['ISSN']) {
-			$t = validate::type($dane['ISSN']);
-			if($t!='ISSN') {
-				error::add('W polu ISSN znajduje się '.$t);
-			}
-		}
-		
-		if($dane['jezyk']=='pol') {
-			$dane['jezyk'] = 'polski';
-		}
-		
-		unset($_POST['okladka']);
-		
-		okladki::upload($_FILES['okladka'], $dane['id'], $dane['ISBN']);
-		
-		db2::add('ksiazki', $dane);
-		self::cache_update($dane['id']);
-	}
-	
 	static function exists($kod) {
 		$info = self::cache_get($kod);
 		if(isset($info['id'])) {
@@ -84,76 +56,6 @@ class ksiazki extends ksiazki_cache {
 		{
 			return FALSE;
 		}
-	}
-	
-	static function edytuj(&$dane) {
-		validate::KOD($dane['id']);
-		$kod = $dane['id'];
-		
-		$old = self::szukaj_KOD($kod);
-		
-		if($dane['id']=='' OR empty($dane['autor']) OR empty($dane['tytul']) OR empty($dane['jezyk'])) {
-			error::add('Brak wymaganych danych o książce (kod, autor, tytuł, język)');
-		}
-		
-		if($dane['nid']!='') {
-			validate::KOD($dane['nid']);
-			$dane['id'] = $dane['nid'];
-		}
-		
-		unset($dane['nid']);
-		
-		if($dane['ISBN']) {
-			$t = validate::type($dane['ISBN']);
-			if($t!='ISBN') {
-				error::add('W polu ISBN znajduje się '.$t);
-			}
-		}
-		if($dane['ISSN']) {
-			$t = validate::type($dane['ISSN']);
-			if($t!='ISSN') {
-				error::add('W polu ISSN znajduje się '.$t);
-			}
-		}
-		
-		if(!$dane['wycofana']) {
-			$dane['wycofana'] = 0;
-			$dane['powod'] = NULL;
-		}
-		
-		okladki::przenies($old['id'], $old['ISBN'], $dane['id'], $dane['ISBN']);
-		
-		unset($_POST['okladka']);
-		
-		// Nowa okładka
-		if(isset($_POST['okladka_del']) || (isset($_FILES['okladka']) && is_uploaded_file($_FILES['okladka']['tmp_name']))) {
-			okladki::usun($dane['id'], $dane['ISBN']);
-			unset($_POST['okladka_del']);
-		}
-		
-		okladki::upload($_FILES['okladka'], $dane['id'], $dane['ISBN']);
-		
-		db2::edit('ksiazki', $dane, array('id' => $kod));
-		self::cache_update($kod);
-		if($dane['id']!=$kod) {
-			self::cache_update($dane['id']);
-		}
-	}
-	
-	static function miejsce($regal, $polka, $rzad, $where) {
-		db2::edit('ksiazki', array('regal' => strtoupper($regal), 'polka' => $polka, 'rzad' => $rzad), $where);
-		self::cache_clear();
-	}
-	
-	static function usun(&$kod) {
-		validate::KOD($kod);
-		
-		$dane = self::szukaj_KOD($kod);
-		
-		okladki::usun($dane['id'], $dane['ISBN']);
-		
-		db2::del('ksiazki', array('id' => $kod));
-		self::cache_clear($kod);
 	}
 	
 	static function szukaj_KOD($kod) {

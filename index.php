@@ -8,9 +8,7 @@ include('design/top.php');
 <td>
 
 <form action="search.php" method="get" onsubmit="return ffalse('step1')">
-<p>KOD/IS*N: <input type="text" name="id" id="step11" required="required" /><br />
-Półka, rząd: <input type="text" name="polka" size="3" maxlength="3" />
-/ <input type="text" name="rzad" size="3" maxlength="3" /></p>
+<p>KOD/IS*N: <input type="text" name="id" id="step11" required="required" /></p>
 <p><input type="submit" value="Znajdź" /></p>
 
 <p><i>Przy ręcznym wpisywaniu ośmiocyfrowego <br /> numeru ISSN, poprzedź go zerem</i></p>
@@ -19,12 +17,6 @@ Półka, rząd: <input type="text" name="polka" size="3" maxlength="3" />
 <script type="text/javascript">
 document.getElementById('step11').focus();
 </script>
-
-<hr />
-
-<a href="list_all.php">Pełna lista książek</a> <br />
-<a href="list_borrowed.php">Wypożyczone</a> <br />
-<a href="list_repulsed.php">Wycofane</a>
 
 </td>
 <td>

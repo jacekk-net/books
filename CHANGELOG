@@ -1,90 +1,34 @@
-System Biblioteczny - CHANGELOG
+System Biblioteczny - Moduł OPAC - CHANGELOG
 
 1.4 Stable
-- Przeniesienie ustawień skryptu do osobnego pliku (includes/config.php)
-- Zmiana modułu do połączeń z MySQL z mysql na pdo_mysql
-- Rozdzielenie tabeli pozycz na dwie: pozycz i pozycz_historia
-- Wydzielenie pokazywania historii wypożyczeń do klasy gotowe
-- Zmiany w wielu miejscach w kodzie związane z tabelą pozycz
-- Poprawki w pliku test.php w związku z w/w zmianami
-- Dodanie pliku UPGRADE z instrukcją aktualizacji
-
-1.3 Stable
-- Poprawienie okładek - getimagesize() zwraca IMAGETYPE_XXX, a nie IMG_XXX
-- Zmiana add_search.php w związku z nowym sposobem wywoływania
-  metod klasy ibd (przeładowanie __call)
-- Naprawienie pokazywania trafności przy wyszukiwaniu pełnotekstowym
-- Dodanie wyświetlania ISBN-10 oraz ISSN-8 dla pojedynczych woluminów
-- Zalążek interfejsu do synchronizacji danych (sync.php)
-- Zalążek system inwentaryzacji (zobacz katalog inwentaryzacja)
-- Dodanie wywołania metody db2::escape_data() przy niestandardowym
-  zapytaniu w funkcji ksiazki::cache_update()
+- Wersja zbudowana na podstawie wersji 1.4 głównego modułu Systemu.
 
 1.2 Stable
+- Dodanie wywołania metody db2::escape_data() przy dodawaniu do
+  cache'a danych przy pomocy funkcji ksiazki::cache_update()
 - Dodanie wywołania metody db2::escape_data() przy niestandardowym
   zapytaniu w funkcji ksiazki::szukaj_info()
-- Przebudowa systemu okładek (Bug #2)
-
-1.1 Stable
-- Modułowy system pobierania informacji ze źródeł zewnętrznych
-- Poprawka wyszukiwania po miejscu wraz z podaną półką/rzędem
-- Możliwość usuwania własnych okładek
-
-1.03 Stable
-- Poprawienie wyszukiwania po ISSN
-- Dodanie wyglądu wydruku w CSS
-- Poprawienie drobnych błędów w kodzie HTML
-- Skrypt sprawdzający spełnienie wymagań systemu - test.php
-- Poprawienie skryptów JavaScript, ktore wymagały, by system znajdował się
-  w głównej scieżce serwera/vHosta (/)
 
 1.02 Stable
-- Możliwość dodawania własnych okładek (także do książek bez ISBN) oraz
-  podmieniania nimi obrazków pobranych z LibraryThing.
+- Poprawione błędne informowanie o wypożyczeniu książki spowodowane
+  złą nazwą zmiennej.
+- Okienko pop-up z powiększonymi okładkami.
+- Przystosowanie skryptu do własnych okładek.
 
 1.01 Stable
-- Zmniejszono częstotliwość odświeżania informacji o nieistniejących
-  miniaturach.
-- Poprawienie nazwy pola (`od2` na `od`) w odpowiedzi z bazy danych już przy
-  cache'owaniu danych.
+- Zmniejszono częstotliwość odświeżania informacji
+  o nieistniejących miniaturach.
 
 1.0 Stable
-- Poprawiono informowanie o stanie książki po więcej niż jednym wypożyczeniu
-- Dodano pobieranie okładek książek
-
-1.0 RC
-- Dodano możliwość zmiany nazwy półki/regału.
-- Prosta historia wypożyczeń.
-- Poprawiono błąd w formularzu wyszukiwania książek
-  (po pożyczeniu/oddaniu woluminów).
-- Możliwość wyszukiwania książek bez podania półki/rzędu.
-
-0.94 Beta
-- Poprawiono informowanie o stanie książki tuż po wypożyczeniu/zwrocie.
-- Poprawienie cache'owania danych o książkach.
-
-0.93 Beta
-- Drobne zmiany wizualne (<fieldset> dla wypożyczania).
+- Poprawiono informowanie o stanie ksiazki po więcej niź jednym wypożyczeniu.
+- Poprawiono cache'owanie danych o woluminach.
+- Dodano pobieranie okładek książek.
 
 0.92 Beta
-- Poprawiono konwersję ISBN-13 do ISBN-10. Funkcja sprawdzająca
-  poczatek ISBN-13 (978) wkradła się do konwersji ISSNu.
-- Usunięto możliwość podania ISBNu w miejsce ISSNu i na odwrót przy
-  dodawaniu i edycji książek.
-- Przy wyświetlaniu danych książki ISSN jest już podawany poprawnie.
+- Przy wyświetlaniu danych ksiązki ISSN jest już podawany poprawnie.
 
 0.91 Beta
-- Poprawa błędnej jednostki w stopce (ms => s).
-- Wykrywanie brakujących rozszerzeń PHP.
-- Jeżeli wyszukiwanie nie zwraca rekordów (SELECT COUNT(*)=='0'),
-  zapytanie o dane nie jest już wykonywane
-- Przy wyszukiwaniu w bazach Biblioteki Narodowej ISBN-13 nie jest
-  konwertowany na ISBN-10, jeśli nie zaczyna się od 978.
-- Poprawiono błąd przy wyszukiwaniu wg. podanych informacji
-  (wynik funkcji ksiazki::szukaj_info() nie był tablicą rekordów).
-- Przygotowania do utworzenia systemu automatycznego budowania
-  wersji skryptów (dodawanie nagłówków do plików,
-  usuwanie zbędnych plików przez system).
+- Przystosowanie do systemu budowania wersji.
 
 0.9 Beta
 - Pierwsza wersja publiczna.

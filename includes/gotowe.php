@@ -5,69 +5,6 @@ class gotowe {
 	static $add = '';
 	static $default = FALSE;
 	
-	static function dodaj_lista($kod, $wlasne, $znalezione=array()) {
-		validate::KOD($kod, FALSE);
-		
-		echo '<p>KOD: <input type="text" name="kod" value="'.$kod.'" readonly="readonly" /></p>
-
-';
-		
-		$i = 0;
-?>
-
-<table>
-<tr> <th>Autor</th> <th>Tytuł</th> <th>Wydanie</th> <th>Miejsce</th> <th>Rok</th> <th>Wydawnictwo</th> <th>Język</th> <th>ISBN</th> <th>ISSN</th> <th>Zapisz</th> </tr>
-<?php
-	if(!empty($wlasne)) {
-?>
-<tr> <th colspan="10">Zasoby własne</th> </tr>
-
-<?php
-foreach($wlasne as $value) {
-	echo '<tr> <form action="add_book.php" method="post">
-';
-	foreach(self::$pola as $v) {
-		echo '<td> <input type="text" name="'.$v.'" value="'.htmlspecialchars($value[$v]).'" /> </td>
-';
-	}
-	echo '<td> <input type="hidden" name="id" value="'.$kod.'" readonly="readonly" /> <input type="submit" value="Zapisz" /> </td>
-</form> </tr>
-';
-}
-	}
-
-foreach($znalezione as $nazwa => $dane) {
-	echo '<tr> <th colspan="10">'.$nazwa.'</th> </tr>';
-	foreach($dane as $value) {
-		echo '<tr> <form action="add_book.php" method="post">
-';
-		foreach(self::$pola as $v) {
-			echo '<td> <input type="text" name="'.$v.'" value="'.htmlspecialchars($value[$v]).'" /> </td>
-';
-		}
-		echo '<td> <input type="hidden" name="id" value="'.$kod.'" readonly="readonly" /> <input type="submit" value="Zapisz" /> </td>
-</form> </tr>
-';
-	}
-}
-?>
-
-<tr> <th colspan="10">Dodaj własną</th> </tr>
-
-<?php
-echo '<tr> <form action="add_book.php" method="post">
-';
-foreach(self::$pola as $v) {
-	echo '<td> <input type="text" name="'.$v.'" /> </td>
-';
-}
-echo '<td> <input type="hidden" name="id" value="'.$kod.'" readonly="readonly" /> <input type="submit" value="Zapisz" /> </td>
-</form> </tr>
-
-</table>
-';
-	}
-	
 	static function sort($by=NULL, $strona=NULL) {
 		if($strona === NULL) {
 			$strona = 0;
@@ -112,26 +49,6 @@ echo '<td> <input type="hidden" name="id" value="'.$kod.'" readonly="readonly" /
 		return $ord;
 	}
 	
-	static function historia($kod) {
-		$st = PDOO::Singleton()->prepare(
-			 'SELECT * FROM pozycz_historia WHERE id=?'."\n"
-			.'UNION'."\n"
-			.'SELECT *, \'\' AS do FROM pozycz WHERE id=? ORDER BY od ASC'
-		);
-		$st->execute(array($kod, $kod));
-		$dane = $st->fetchAll();
-		
-		$info = '<table id="bhist">
-<tr> <th>Pożyczający</th> <th>Od</th> <th>Do</th> </tr>
-';
-		
-		foreach($dane as $o) {
-			$info .= '<tr> <td>'.htmlspecialchars($o['kto']).'</td> <td>'.date('Y-m-d H:i:s', $o['od']).'</td> <td>'.($o['do'] ? date('Y-m-d H:i:s', $o['do']) : '').'</td> </tr>'."\n";
-		}
-		
-		echo $info.'</table>';
-	}
-	
 	static function informacje($kod, $dane=NULL) {
 		if(is_null($dane)) {
 			$dane = ksiazki::szukaj_KOD($kod);
@@ -139,7 +56,7 @@ echo '<td> <input type="hidden" name="id" value="'.$kod.'" readonly="readonly" /
 		
 		if($dane['wycofana']) {
 			$class = 'wyc';
-			$info = '<p>Książka wycofana'.($dane['powod'] ? ' <br /> '.$dane['powod'] : '').'</p>';
+			$info = '<p>Książka wycofana</p>';
 		}
 		else
 		{
@@ -147,19 +64,7 @@ echo '<td> <input type="hidden" name="id" value="'.$kod.'" readonly="readonly" /
 				$class = 'norm';
 				$info = '
 
-<fieldset>
-<legend>Wypożyczanie</legend>
-<p>Książka w bibliotece</p>
-<form action="borrow_book.php" method="post" onsubmit="return ffalse(\'step1\')">
-<p>Pożycz <input type="text" name="kod" value="'.$dane['id'].'" readonly="readonly" /><br />
-Komu? <input type="text" name="kto" id="step11" required="required" /></p>
-<p><input type="submit" value="Pożycz" /></p>
-
-<script type="text/javascript">
-document.getElementById(\'step11\').focus();
-</script>
-</form>
-</fieldset>
+<p>Książka w dostępna</p>
 
 ';
 			}
@@ -168,18 +73,7 @@ document.getElementById(\'step11\').focus();
 				$class = 'poz';
 				$info = '
 
-<fieldset>
-<legend>Wypożyczanie</legend>
-<p>Wypożyczył(a) '.$dane['kto'].' w dniu '.date('d.m.Y', $dane['od']).'</p>
-
-<form action="borrow_back.php" method="post">
-<p><input type="hidden" name="kod" value="'.$dane['id'].'" /> <input type="submit" value="Zwrot"  id="step11" /></p>
-
-<script type="text/javascript">
-document.getElementById(\'step11\').focus();
-</script>
-</form>
-</fieldset>
+<p>Książka wypożyczona</p>
 
 ';
 			}
@@ -200,17 +94,6 @@ ISBN-10: '.convert::ISBN13_to_ISBN10($dane['ISBN']) : '').($dane['ISSN'] ? '<br 
 ISSN-13: '.$dane['ISSN'].'<br />
 ISSN-10: '.convert::ISSN13_to_ISSN8($dane['ISSN']) : '').'</p>
 '.$info.'
-<form action="edit.php" method="get" style="float:left;">
-<p><input type="hidden" name="kod" value="'.$dane['id'].'" /> <input type="submit" value="Edytuj" /></p>
-</form>
-
-<form action="del.php" method="get" style="float:left;">
-<p><input type="hidden" name="kod" value="'.$dane['id'].'" /> <input type="submit" value="Usuń" /></p>
-</form>
-'.($dane['od'] ? '
-<form action="borrow_history.php" method="get" style="float:right;">
-<p><input type="hidden" name="kod" value="'.$dane['id'].'" /> <input type="submit" value="Historia wypożyczeń" /></p>
-</form>' : '').'
 </div>';
 	}
 	
@@ -228,8 +111,6 @@ ISSN-10: '.convert::ISSN13_to_ISSN8($dane['ISSN']) : '').'</p>
 		
 		if($_GET['id']) {
 			self::add('id', 13);
-			self::add('polka', 3);
-			self::add('rzad', 3);
 		}
 		else
 		{
@@ -277,7 +158,7 @@ ISSN-10: '.convert::ISSN13_to_ISSN8($dane['ISSN']) : '').'</p>
 				else
 				{
 					$class = 'poz';
-					$info = $ksiazka['kto'];
+					$info = 'Książka wypożyczona';
 					$pozycz = TRUE;
 				}
 			}
@@ -306,9 +187,7 @@ ISSN-10: '.convert::ISSN13_to_ISSN8($dane['ISSN']) : '').'</p>
 	<td>'.min(100, (int)($ksiazka['revelance']*10)).'% </td>' : '').'
 	<td class="n">
 		'.$info.' <br />
-		<a href="info.php?kod='.$ksiazka['id'].'">Więcej</a>
-		<a href="edit.php?kod='.$ksiazka['id'].'">Edycja</a>
-		<a href="del.php?kod='.$ksiazka['id'].'">Usuń</a>
+		<a href="info.php?kod='.$ksiazka['id'].'">Więcej...</a>
 	</td>
 </tr>
 ';

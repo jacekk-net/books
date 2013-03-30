@@ -15,16 +15,8 @@ if(!defined('TOP_SEND')) {
 <h1> System biblioteczny </h1>
 
 <ul id="menu">
-<li><a href="index.php">Wypożyczanie/wyszukiwanie</a></li>
-
-<li> </li>
-
-<li><a href="add.php">Dodaj książkę</a></li>
-<li><a href="place.php">Ustaw położenie</a></li>
-
-<li> </li>
-
-<li><a href="generate.php">Etykiety</a></li>
+<li><a href="index.php">Wyszukiwanie</a></li>
+<li><a href="list_all.php">Pełna lista książek</a></li>
 </ul>
 
 <h2> <?php echo $title; ?> </h2>
