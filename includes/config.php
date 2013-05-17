@@ -16,4 +16,4 @@ class config {
 	// Klucz API LibraryThing
 	static $lt_api = '';
 }
-?> 
+?>

@@ -1,6 +1,8 @@
 <?php
 function errorHandler($errno, $errstr, $errfile, $errline) {
 	header('HTTP/1.1 500 Internal Server Error');
+	echo $errstr;
+	die();
 }
 
 set_error_handler('errorHandler');
