@@ -1,6 +1,6 @@
 <?php
 if(!extension_loaded('gd')) {
-	error::add('Brak rozszerzenia GD/GD2. Generowanie kodów kreskowych jest niemożliwe.');
+	errorclass::add('Brak rozszerzenia GD/GD2. Generowanie kodów kreskowych jest niemożliwe.');
 }
 
 $code = array(
@@ -79,7 +79,7 @@ function kod($kod) {
 	global $code;
 	
 	if(trim($kod, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $')!='') {
-		error::add('Znaki inne niż cyfry, litery, pauza, kropka, spacja, ukośnik');
+		errorclass::add('Znaki inne niż cyfry, litery, pauza, kropka, spacja, ukośnik');
 	}
 	
 	$kod = $code['SS'].$code['BT'].gen_binary($kod).$code['SS'];

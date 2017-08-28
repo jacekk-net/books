@@ -1,6 +1,6 @@
 <?php
 if(!extension_loaded('yaz')) {
-	error::add('Brak rozszerzenia YAZ. Wyszukiwanie w bazach Biblioteki Narodowej niemożliwe.');
+	errorclass::add('Brak rozszerzenia YAZ. Wyszukiwanie w bazach Biblioteki Narodowej niemożliwe.');
 }
 
 class YAZ {
@@ -72,7 +72,7 @@ class YAZ {
 	
 	static function is_error() {
 		if($e = yaz_error(self::$connection)) {
-			error::add('Błąd YAZ: '.$e);
+			errorclass::add('Błąd YAZ: '.$e);
 		}
 		else
 		{

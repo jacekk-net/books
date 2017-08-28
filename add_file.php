@@ -4,7 +4,7 @@ include('./includes/std.php');
 validate::KOD($_POST['kod'], FALSE);
 
 if(!is_uploaded_file($_FILES['marc']['tmp_name'])) {
-	error::add('Nie wysłano pliku!');
+	errorclass::add('Nie wysłano pliku!');
 }
 
 $szukaj = array( MARC21::to_array( MARC21::from_string( file_get_contents( $_FILES['marc']['tmp_name'] ) ) ) );

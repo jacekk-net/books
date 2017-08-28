@@ -6,7 +6,7 @@ validate::KOD($_GET['kod']);
 $ksiazka = ksiazki::szukaj_KOD($_GET['kod']);
 
 if(empty($ksiazka)) {
-	error::add('Wybrana książka nie istnieje');
+	errorclass::add('Wybrana książka nie istnieje');
 }
 
 $title = 'Usuwanie książki';

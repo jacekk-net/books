@@ -252,7 +252,7 @@ ISSN-10: '.convert::ISSN13_to_ISSN8($dane['ISSN']) : '').'</p>
 		list($num, $ksiazki, $revelance) = ksiazki::szukaj_info($_GET, $sort, $_GET['strona']*self::$nastrone, self::$nastrone);
 		
 		if($num==0) {
-			error::add('Brak książek spełniających podane kryteria');
+			errorclass::add('Brak książek spełniających podane kryteria');
 		}
 		elseif($num==1 AND !$revelance) {
 			self::informacje(NULL, $ksiazki[0]);

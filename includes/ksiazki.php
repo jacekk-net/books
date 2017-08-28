@@ -53,13 +53,13 @@ class ksiazki extends ksiazki_cache {
 		if($dane['ISBN']) {
 			$t = validate::type($dane['ISBN']);
 			if($t!='ISBN') {
-				error::add('W polu ISBN znajduje się '.$t);
+				errorclass::add('W polu ISBN znajduje się '.$t);
 			}
 		}
 		if($dane['ISSN']) {
 			$t = validate::type($dane['ISSN']);
 			if($t!='ISSN') {
-				error::add('W polu ISSN znajduje się '.$t);
+				errorclass::add('W polu ISSN znajduje się '.$t);
 			}
 		}
 		
@@ -93,7 +93,7 @@ class ksiazki extends ksiazki_cache {
 		$old = self::szukaj_KOD($kod);
 		
 		if($dane['id']=='' OR empty($dane['autor']) OR empty($dane['tytul']) OR empty($dane['jezyk'])) {
-			error::add('Brak wymaganych danych o książce (kod, autor, tytuł, język)');
+			errorclass::add('Brak wymaganych danych o książce (kod, autor, tytuł, język)');
 		}
 		
 		if($dane['nid']!='') {
@@ -106,13 +106,13 @@ class ksiazki extends ksiazki_cache {
 		if($dane['ISBN']) {
 			$t = validate::type($dane['ISBN']);
 			if($t!='ISBN') {
-				error::add('W polu ISBN znajduje się '.$t);
+				errorclass::add('W polu ISBN znajduje się '.$t);
 			}
 		}
 		if($dane['ISSN']) {
 			$t = validate::type($dane['ISSN']);
 			if($t!='ISSN') {
-				error::add('W polu ISSN znajduje się '.$t);
+				errorclass::add('W polu ISSN znajduje się '.$t);
 			}
 		}
 		

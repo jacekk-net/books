@@ -2,7 +2,7 @@
 include('./includes/std.php');
 
 if($_POST['id']=='' OR empty($_POST['autor']) OR empty($_POST['tytul']) OR empty($_POST['jezyk'])) {
-	error::add('Brak wymaganych danych o książce (kod, autor, tytuł, język)');
+	errorclass::add('Brak wymaganych danych o książce (kod, autor, tytuł, język)');
 }
 
 ksiazki::dodaj($_POST);

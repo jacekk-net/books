@@ -2,7 +2,7 @@
 class pozycz {
 	static function wypozyczenie($kod, $kto) {
 		if(self::pozyczona($kod)!==FALSE) {
-			error::add('Książka jest już wypożyczona!');
+			errorclass::add('Książka jest już wypożyczona!');
 		}
 		
 		db2::add('pozycz', array('id' => $kod, 'kto' => $kto, 'od' => time()));
@@ -11,7 +11,7 @@ class pozycz {
 	
 	static function zwrot($kod) {
 		if(self::pozyczona($kod)===FALSE) {
-			error::add('Książka nie jest wypożyczona!');
+			errorclass::add('Książka nie jest wypożyczona!');
 		}
 		
 		$st = PDOO::Singleton()->prepare('INSERT INTO pozycz_historia (id, kto, od, do)

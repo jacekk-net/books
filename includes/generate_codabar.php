@@ -1,6 +1,6 @@
 <?php
 if(!extension_loaded('gd')) {
-	error::add('Brak rozszerzenia GD/GD2. Generowanie kodów kreskowych jest niemożliwe.');
+	errorclass::add('Brak rozszerzenia GD/GD2. Generowanie kodów kreskowych jest niemożliwe.');
 }
 
 $code = array(

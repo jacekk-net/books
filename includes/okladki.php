@@ -152,7 +152,7 @@ class okladki {
 				$image = imagecreatefromxpm($file);
 			break;
 			default:
-				error::add('Nieznany format obrazka: '.$type.'!');
+				errorclass::add('Nieznany format obrazka: '.$type.'!');
 				return FALSE;
 			break;
 		}

@@ -4,47 +4,47 @@ class validate {
 	
 	static function KOD(&$kod, $exists=NULL) {
 		if(ltrim($kod, '0123456789')!='' OR strlen($kod)>8 OR strlen($kod)<1) {
-			error::add('Błędny KOD - dozwolone tylko cyfry');
+			errorclass::add('Błędny KOD - dozwolone tylko cyfry');
 		}
 		
 		$kod = str_pad($kod, 8, '0', STR_PAD_LEFT);
 		
 		if(!is_null($exists)) {
 			if($exists!==ksiazki::exists($kod)) {
-				error::add('Wybrana książka '.($exists ? 'nie' : 'już').' istnieje!');
+				errorclass::add('Wybrana książka '.($exists ? 'nie' : 'już').' istnieje!');
 			}
 		}
 	}
 	
 	static function EAN($kod) {
 		if( ltrim($kod, '0123456789') != '' OR strlen($kod) != 13 ) {
-			error::add('Błędny ISN - dozwolone tylko cyfry');
+			errorclass::add('Błędny ISN - dozwolone tylko cyfry');
 		}
 		
 		if( substr($kod, -1) != checksum::EAN(substr($kod, 0, -1)) ) {
-			error::add('Podany kod ISN jest błędny');
+			errorclass::add('Podany kod ISN jest błędny');
 		}
 	}
 	
 	static function ISBN(&$kod) {
 		$kod = str_replace('-', '', strtoupper($kod));
 		if( ltrim($kod, '0123456789X') != '' OR strlen($kod) != 10 ) {
-			error::add('Błędny ISBN - dozwolone tylko cyfry i znak X');
+			errorclass::add('Błędny ISBN - dozwolone tylko cyfry i znak X');
 		}
 		
 		if( substr($kod, -1) != checksum::ISBN(substr($kod, 0, -1)) ) {
-			error::add('Podany ISBN jest błędny');
+			errorclass::add('Podany ISBN jest błędny');
 		}
 	}
 	
 	static function ISSN(&$kod) {
 		$kod = str_replace('-', '', strtoupper($kod));
 		if( ltrim($kod, '0123456789X') != '' OR strlen($kod) != 8 ) {
-			error::add('Błędny ISSN - dozwolone tylko cyfry');
+			errorclass::add('Błędny ISSN - dozwolone tylko cyfry');
 		}
 		
 		if( substr($kod, -1) != checksum::ISSN(substr($kod, 0, -1)) ) {
-			error::add('Podany ISSN jest błędny');
+			errorclass::add('Podany ISSN jest błędny');
 		}
 	}
 	
@@ -59,13 +59,13 @@ class validate {
 		}
 		
 		if(!ctype_alnum($kod) OR ctype_digit($kod) OR $kod=='' OR strlen($kod)>5) {
-			error::add('Podany kod miejsca (regał) jest błędny');
+			errorclass::add('Podany kod miejsca (regał) jest błędny');
 		}
 		if($polka!='' AND (!ctype_digit($polka) OR $polka>255)) {
-			error::add('Podany kod miejsca (półka) jest błędny');
+			errorclass::add('Podany kod miejsca (półka) jest błędny');
 		}
 		if($rzad!='' AND (!ctype_digit($rzad) OR $rzad>255)) {
-			error::add('Podany kod miejsca (rząd) jest błędny');
+			errorclass::add('Podany kod miejsca (rząd) jest błędny');
 		}
 	}
 	
@@ -121,7 +121,7 @@ class validate {
 			return 'MSC';
 		}
 		
-		error::add('Nieznany typ kodu');
+		errorclass::add('Nieznany typ kodu');
 	}
 }
 ?>
