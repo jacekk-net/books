@@ -1,7 +1,7 @@
 <?php
 define('STANDARD', TRUE);
 
-class error {
+class errorclass {
 	static $time;
 	static function add($text) {
 		$title = 'Błąd';
@@ -14,7 +14,7 @@ class error {
 	}
 }
 
-error::$time = microtime(TRUE);
+errorclass::$time = microtime(TRUE);
 
 function __autoload($class) {
 	if($class == 'sql') {

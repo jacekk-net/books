@@ -10,7 +10,7 @@ class convert {
 		}
 		else
 		{
-			error::add('Kodu ISBN-13 '.$kod.' nie można zamienić na ISBN-10!');
+			errorclass::add('Kodu ISBN-13 '.$kod.' nie można zamienić na ISBN-10!');
 		}
 	}
 	
